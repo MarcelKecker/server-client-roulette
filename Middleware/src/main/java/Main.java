@@ -1,5 +1,5 @@
-import communication.ChatroomServerProxy;
-import fachlogik.Chatroom;
+import communication.RoulettetableServerProxy;
+import fachlogik.Roulettetable;
 
 import java.io.IOException;
 import java.net.ServerSocket;
