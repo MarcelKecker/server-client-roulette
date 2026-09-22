@@ -1,5 +1,4 @@
 import communication.RoulettetableClientProxy;
-import communication.LogWriter;
 import fachlogik.Player;
 
 void main() throws IOException {
@@ -10,13 +9,17 @@ void main() throws IOException {
     String name = scanner.nextLine();
     Player Player = new Player(name);
     RoulettetableClientProxy.enter(Player);
-    String input;
-    do{
-        System.out.println("Nachricht eingeben, -1 um abzubrechen");
-        input = scanner.nextLine();
-        if (!input.equals("-1")) {
-            RoulettetableClientProxy.post(Player, input);
+    System.out.println("Gib eine Wette ein: Zahl zwischen 0-36, rot/schwarz oder gerade/ungerade");
+    String inputBet = scanner.nextLine();
+    System.out.println("Gib deinen Einsatz in Euro ein");
+    String inputStake = scanner.nextLine();
+    RoulettetableClientProxy.post(Player, inputBet, inputStake);
+    do {
+        System.out.println("Gib eine Wette ein: Zahl zwischen 0-36, rot/schwarz oder gerade/ungerade, fertig um wetten abzuschicken");
+        inputBet = scanner.nextLine();
+        if (!inputBet.equals("fertig")) {
+            RoulettetableClientProxy.post(Player, inputBet, inputStake);
         }
-    } while (!input.equals("-1"));
+    } while (!inputBet.equals("fertig"));
     RoulettetableClientProxy.disconnect();
 }
