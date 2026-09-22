@@ -46,6 +46,6 @@ public class Bet {
 
     @Override
     public String toString() {
-        return "TODO";
+        return playerId + "\t" + stake + "\t" + number + "\t" + betType;
     }
 }

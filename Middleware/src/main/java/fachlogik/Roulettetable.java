@@ -5,14 +5,14 @@ import interfaces.IPlayer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Roulettetable implements interfaces.IChatroom {
-    List<IChatter> players = new ArrayList<>();
+public class Roulettetable implements interfaces.IRoulettetable {
+    List<IPlayer> players = new ArrayList<>();
     @Override
     public void enter(IPlayer player) {
         if (players.contains(player)) {
             throw new IllegalArgumentException("Player " + player.getName() + " already exists");
         }
-        players.add(chatter);
+        players.add(player);
         post(player, "entered");
     }
 
