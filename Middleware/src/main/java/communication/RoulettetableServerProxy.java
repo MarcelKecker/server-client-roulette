@@ -15,7 +15,7 @@ public class RoulettetableServerProxy implements Runnable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
-    IRoulettetable Roulettetable;
+    IRoulettetable roulettetable;
     HashMap<Integer, IPlayer> players;
     public RoulettetableServerProxy(Socket socket, IRoulettetable roulettetable) throws IOException {
         this.socket = socket;
@@ -27,11 +27,7 @@ public class RoulettetableServerProxy implements Runnable {
 
     @Override
     public void run() {
-<<<<<<< Updated upstream
-        writer.println("Welcome to the Roulettetable Server");
-=======
         writer.println("Willkommen am Pokertisch");
->>>>>>> Stashed changes
         boolean running = true;
         do {
             writer.println("1: Beitreten; 2: Verlassen; 3: Abschicken; 4: Verbindung trennen");
@@ -73,20 +69,15 @@ public class RoulettetableServerProxy implements Runnable {
     private void leave() throws IOException {
         IPlayer player = getPlayer();
         try {
-            chatroom.leave(player);
+            roulettetable.leave(player);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
         }
     }
     private void post() throws IOException {
-<<<<<<< Updated upstream
         IPlayer player = getPlayer();
-        writer.println("Enter message");
-=======
-        IChatter chatter = getChatter();
         writer.println("Nachricht eingeben");
->>>>>>> Stashed changes
         String message = reader.readLine();
         try {
             roulettetable.post(player, message);
@@ -97,7 +88,7 @@ public class RoulettetableServerProxy implements Runnable {
     }
 
     private void disconnect() {
-        for (IPlayer iplayer : players.values()) {
+        for (IPlayer iPlayer : players.values()) {
             PlayerClientProxy player = (PlayerClientProxy) iPlayer;
             player.deactivate();
         }
@@ -111,13 +102,8 @@ public class RoulettetableServerProxy implements Runnable {
         writer.println(e.getMessage());
     }
 
-<<<<<<< Updated upstream
     private IPlayer getPlayer() throws IOException {
-        writer.println("Enter player id");
-=======
-    private IChatter getChatter() throws IOException {
         writer.println("Spieler Id eingeben");
->>>>>>> Stashed changes
         Integer id = Integer.valueOf(reader.readLine());
         if (players.containsKey(id)) {
             return players.get(id);
@@ -127,7 +113,7 @@ public class RoulettetableServerProxy implements Runnable {
         System.out.println(this.socket.getInetAddress());
         Socket socket1 = new Socket(socket.getInetAddress(), port);
         PlayerClientProxy playerClientProxy = new PlayerClientProxy(socket1);
-        players.put(id, chatterClientProxy);
+        players.put(id, playerClientProxy);
         return playerClientProxy;
     }
 }
