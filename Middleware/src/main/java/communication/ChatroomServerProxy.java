@@ -11,23 +11,23 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ChatroomServerProxy implements Runnable {
+public class RoulettetableServerProxy implements Runnable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
-    IChatroom chatroom;
-    HashMap<Integer, IChatter> chatters;
-    public ChatroomServerProxy(Socket socket, IChatroom chatroom) throws IOException {
+    IRoulettetable Roulettetable;
+    HashMap<Integer, IPlayer> players;
+    public RoulettetableServerProxy(Socket socket, IRoulettetable roulettetable) throws IOException {
         this.socket = socket;
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
         writer = new LogWriter(socket.getOutputStream(), true);
-        this.chatroom = chatroom;
-        chatters = new HashMap<>();
+        this.roulettetable = roulettetable;
+        players = new HashMap<>();
     }
 
     @Override
     public void run() {
-        writer.println("Welcome to the Chatroom Server");
+        writer.println("Welcome to the Roulettetable Server");
         boolean running = true;
         do {
             writer.println("1: enter; 2: leave; 3: post; 4: disconnect");
@@ -57,9 +57,9 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void enter() throws IOException {
-        IChatter chatter = getChatter();
+        IPlayer player = getPlayer();
         try {
-            chatroom.enter(chatter);
+            roulettetable.enter(player);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -67,20 +67,20 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void leave() throws IOException {
-        IChatter chatter = getChatter();
+        IPlayer player = getPlayer();
         try {
-            chatroom.leave(chatter);
+            chatroom.leave(player);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
         }
     }
     private void post() throws IOException {
-        IChatter chatter = getChatter();
+        IPlayer player = getPlayer();
         writer.println("Enter message");
         String message = reader.readLine();
         try {
-            chatroom.post(chatter, message);
+            roulettetable.post(player, message);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -88,9 +88,9 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void disconnect() {
-        for (IChatter iChatter : chatters.values()) {
-            ChatterClientProxy chatter = (ChatterClientProxy) iChatter;
-            chatter.deactivate();
+        for (IPlayer iplayer : players.values()) {
+            PlayerClientProxy player = (PlayerClientProxy) iPlayer;
+            player.deactivate();
         }
         writer.println("Disconnected from the Chatroom");
     }
@@ -102,18 +102,18 @@ public class ChatroomServerProxy implements Runnable {
         writer.println(e.getMessage());
     }
 
-    private IChatter getChatter() throws IOException {
-        writer.println("Enter chatter id");
+    private IPlayer getPlayer() throws IOException {
+        writer.println("Enter player id");
         Integer id = Integer.valueOf(reader.readLine());
-        if (chatters.containsKey(id)) {
-            return chatters.get(id);
+        if (players.containsKey(id)) {
+            return players.get(id);
         }
         writer.println("Enter ServerSocket Port");
         int port = Integer.parseInt(reader.readLine());
         System.out.println(this.socket.getInetAddress());
         Socket socket1 = new Socket(socket.getInetAddress(), port);
-        ChatterClientProxy chatterClientProxy = new ChatterClientProxy(socket1);
-        chatters.put(id, chatterClientProxy);
-        return chatterClientProxy;
+        PlayerClientProxy playerClientProxy = new PlayerClientProxy(socket1);
+        players.put(id, chatterClientProxy);
+        return playerClientProxy;
     }
 }

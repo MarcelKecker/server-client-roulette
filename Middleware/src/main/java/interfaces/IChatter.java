@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface IChatter {
+public interface IPlayer {
     void hear(String message);
     String getName();
 }
