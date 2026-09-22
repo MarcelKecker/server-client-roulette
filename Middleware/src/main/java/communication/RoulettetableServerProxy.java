@@ -1,8 +1,8 @@
 package communication;
 
-import fachlogik.Chatter;
-import interfaces.IChatroom;
-import interfaces.IChatter;
+import fachlogik.Player;
+import interfaces.IRoulettetable;
+import interfaces.IPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;

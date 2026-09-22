@@ -1,7 +1,7 @@
 package communication;
 
-import fachlogik.Chatter;
-import interfaces.IChatter;
+import fachlogik.Player;
+import interfaces.IPlayer;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

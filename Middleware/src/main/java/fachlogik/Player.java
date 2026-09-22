@@ -1,8 +1,8 @@
 package fachlogik;
 
-import interfaces.IChatter;
+import interfaces.IPlayer;
 
-public class Player implements IChatter {
+public class Player implements IPlayer {
     String name;
     public Player(String name) {
         this.name = name;

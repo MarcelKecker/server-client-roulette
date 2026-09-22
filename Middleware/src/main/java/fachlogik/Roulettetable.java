@@ -1,6 +1,6 @@
 package fachlogik;
 
-import interfaces.IChatter;
+import interfaces.IPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
