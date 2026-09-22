@@ -11,26 +11,30 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ChatroomServerProxy implements Runnable {
+public class RoulettetableServerProxy implements Runnable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
-    IChatroom chatroom;
-    HashMap<Integer, IChatter> chatters;
-    public ChatroomServerProxy(Socket socket, IChatroom chatroom) throws IOException {
+    IRoulettetable Roulettetable;
+    HashMap<Integer, IPlayer> players;
+    public RoulettetableServerProxy(Socket socket, IRoulettetable roulettetable) throws IOException {
         this.socket = socket;
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
         writer = new LogWriter(socket.getOutputStream(), true);
-        this.chatroom = chatroom;
-        chatters = new HashMap<>();
+        this.roulettetable = roulettetable;
+        players = new HashMap<>();
     }
 
     @Override
     public void run() {
-        writer.println("Welcome to the Chatroom Server");
+<<<<<<< Updated upstream
+        writer.println("Welcome to the Roulettetable Server");
+=======
+        writer.println("Willkommen am Pokertisch");
+>>>>>>> Stashed changes
         boolean running = true;
         do {
-            writer.println("1: enter; 2: leave; 3: post; 4: disconnect");
+            writer.println("1: Beitreten; 2: Verlassen; 3: Abschicken; 4: Verbindung trennen");
             String input;
             try {
                 input = reader.readLine();
@@ -42,8 +46,8 @@ public class ChatroomServerProxy implements Runnable {
                     running = false;
                     break;
                     default:
-                        writer.println("Invalid input");
-                        System.err.println("Invalid input " + input + " by " + socket.getRemoteSocketAddress());
+                        writer.println("Ungültige Eingabe");
+                        System.err.println("Ungültige Eingabe " + input + " von " + socket.getRemoteSocketAddress());
                         break;
 
                 }
@@ -57,9 +61,9 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void enter() throws IOException {
-        IChatter chatter = getChatter();
+        IPlayer player = getPlayer();
         try {
-            chatroom.enter(chatter);
+            roulettetable.enter(player);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -67,20 +71,25 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void leave() throws IOException {
-        IChatter chatter = getChatter();
+        IPlayer player = getPlayer();
         try {
-            chatroom.leave(chatter);
+            chatroom.leave(player);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
         }
     }
     private void post() throws IOException {
-        IChatter chatter = getChatter();
+<<<<<<< Updated upstream
+        IPlayer player = getPlayer();
         writer.println("Enter message");
+=======
+        IChatter chatter = getChatter();
+        writer.println("Nachricht eingeben");
+>>>>>>> Stashed changes
         String message = reader.readLine();
         try {
-            chatroom.post(chatter, message);
+            roulettetable.post(player, message);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -88,11 +97,11 @@ public class ChatroomServerProxy implements Runnable {
     }
 
     private void disconnect() {
-        for (IChatter iChatter : chatters.values()) {
-            ChatterClientProxy chatter = (ChatterClientProxy) iChatter;
-            chatter.deactivate();
+        for (IPlayer iplayer : players.values()) {
+            PlayerClientProxy player = (PlayerClientProxy) iPlayer;
+            player.deactivate();
         }
-        writer.println("Disconnected from the Chatroom");
+        writer.println("Verbindung vom Pokertisch trennen");
     }
 
     private void handleException(Exception e) {
@@ -102,18 +111,23 @@ public class ChatroomServerProxy implements Runnable {
         writer.println(e.getMessage());
     }
 
+<<<<<<< Updated upstream
+    private IPlayer getPlayer() throws IOException {
+        writer.println("Enter player id");
+=======
     private IChatter getChatter() throws IOException {
-        writer.println("Enter chatter id");
+        writer.println("Spieler Id eingeben");
+>>>>>>> Stashed changes
         Integer id = Integer.valueOf(reader.readLine());
-        if (chatters.containsKey(id)) {
-            return chatters.get(id);
+        if (players.containsKey(id)) {
+            return players.get(id);
         }
-        writer.println("Enter ServerSocket Port");
+        writer.println("ServerSocket Port eingeben");
         int port = Integer.parseInt(reader.readLine());
         System.out.println(this.socket.getInetAddress());
         Socket socket1 = new Socket(socket.getInetAddress(), port);
-        ChatterClientProxy chatterClientProxy = new ChatterClientProxy(socket1);
-        chatters.put(id, chatterClientProxy);
-        return chatterClientProxy;
+        PlayerClientProxy playerClientProxy = new PlayerClientProxy(socket1);
+        players.put(id, chatterClientProxy);
+        return playerClientProxy;
     }
 }

@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ChatterClientProxy implements IChatter {
+public class PlayerClientProxy implements IPlayer {
     Socket socket;
     LogReader reader;
     LogWriter writer;
     boolean active;
 
-    public ChatterClientProxy(Socket socket) throws IOException {
+    public PlayerClientProxy(Socket socket) throws IOException {
         this.socket = socket;
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
         writer = new LogWriter(socket.getOutputStream(), true);

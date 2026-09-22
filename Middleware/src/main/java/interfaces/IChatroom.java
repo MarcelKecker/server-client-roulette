@@ -1,7 +1,7 @@
 package interfaces;
 
-public interface IChatroom {
-    void enter(IChatter chatter);
-    void leave(IChatter chatter);
-    void post(IChatter chatter, String message);
+public interface IRoulettetable {
+    void enter(IPlayer player);
+    void leave(IPlayer player);
+    void post(IPlayer player, String message);
 }

@@ -2,9 +2,9 @@ package fachlogik;
 
 import interfaces.IChatter;
 
-public class Chatter implements IChatter {
+public class Player implements IChatter {
     String name;
-    public Chatter(String name) {
+    public Player(String name) {
         this.name = name;
     }
     @Override
