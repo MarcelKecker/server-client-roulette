@@ -8,11 +8,11 @@ import java.net.Socket;
 public class Main {
     static void main() throws IOException {
         ServerSocket serverSocket = new ServerSocket(12345);
-        Chatroom chatroom = new Chatroom();
+        Roulettetable roulettetable = new Roulettetable();
         while(true){
             Socket clientSocket = serverSocket.accept();
-            ChatroomServerProxy chatroomServerProxy = new ChatroomServerProxy(clientSocket, chatroom);
-            Thread t = new Thread(chatroomServerProxy);
+            RoulettetableServerProxy roulettetableServerProxy = new RoulettetableServerProxy(clientSocket, roulettetable);
+            Thread t = new Thread(roulettetableServerProxy);
             t.start();
         }
     }
