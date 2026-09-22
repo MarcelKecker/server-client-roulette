@@ -24,17 +24,20 @@ public class PlayerServerProxy implements Runnable{
         writer.println("Welcome to the Player Server Proxy");
         String input;
         do {
-            writer.println("1: Hear; 2: Get Name; 3: Disconnect");
+            writer.println("1: Hear; 2: Get Name; 3: Get Saldo; 4: Disconnect");
             try {
                 input = reader.readLine();
                 switch (input) {
                     case "1":
-                        hear();
+                        hearResults();
                         break;
                     case "2":
                         getName();
                         break;
                     case "3":
+                        getSaldo();
+                        break;
+                    case "4":
                         disconnect();
                         break;
                     default:
@@ -43,14 +46,16 @@ public class PlayerServerProxy implements Runnable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } while (!input.equals("3"));
+        } while (!input.equals("4"));
     }
 
-    private void hear() {
+    private void hearResults() {
         try {
-            writer.println("Enter message");
-            String message = reader.readLine();
-            Player.hear(message);
+            writer.println("Enter result");
+            String result = reader.readLine();
+            writer.println("Enter win");
+            int win = Integer.parseInt(reader.readLine());
+            Player.hearResults(result, win);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -66,6 +71,16 @@ public class PlayerServerProxy implements Runnable{
             handleException(e);
         }
 
+    }
+
+    private void getSaldo() {
+        try {
+            int saldo = Player.getSaldo();
+            writer.println("0");
+            writer.println(saldo);
+        } catch (Exception e) {
+            handleException(e);
+        }
     }
 
     private void disconnect() {

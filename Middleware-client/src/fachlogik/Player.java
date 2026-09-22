@@ -4,12 +4,14 @@ import interfaces.IPlayer;
 
 public class Player implements IPlayer {
     String name;
+    int saldo;
     public Player(String name) {
         this.name = name;
     }
     @Override
-    public void hear(String message) {
-        System.out.println(message + " (" + name + ")");
+    public void hearResults(String result, int win) {
+        setSaldo(getSaldo() + win);
+        System.out.println(result);
     }
 
     @Override
@@ -24,6 +26,6 @@ public class Player implements IPlayer {
 
     @Override
     public void setSaldo(int saldo) {
-
+        this.saldo = saldo;
     }
 }
