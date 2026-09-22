@@ -12,7 +12,7 @@ void main() throws IOException {
     System.out.println("Gib eine Wette ein: Zahl zwischen 0-36, rot/schwarz oder gerade/ungerade");
     String inputBet = scanner.nextLine();
     System.out.println("Gib deinen Einsatz in Euro ein");
-    String inputStake = scanner.nextLine();
+    int inputStake = scanner.nextInt();
     RoulettetableClientProxy.post(Player, inputBet, inputStake);
     do {
         System.out.println("Gib eine Wette ein: Zahl zwischen 0-36, rot/schwarz oder gerade/ungerade, fertig um wetten abzuschicken");
