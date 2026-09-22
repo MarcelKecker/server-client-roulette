@@ -60,13 +60,15 @@ public class RoulettetableClientProxy implements IRoulettetable {
     }
 
     @Override
-    public void post(IPlayer Player, String message) {
+    public void post(IPlayer Player, String bet,  int stake) {
         try {
             reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
             writer.println("3");
             sendPlayer(Player);
-            reader.readLine(); //Messageanforderung lesen
-            writer.println(message);
+            reader.readLine(); //Wettanforderung lesen
+            writer.println(bet);
+            reader.readLine(); // Einsatzanforderung lesen
+            writer.println(stake);
             String returnCode = reader.readLine(); //Returncode lesen
             if (!returnCode.equals("0")) {
                 handleException(returnCode);
