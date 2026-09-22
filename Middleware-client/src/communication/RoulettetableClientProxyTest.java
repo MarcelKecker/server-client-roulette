@@ -9,26 +9,26 @@ import java.io.IOException;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class ChatroomClientProxyTest {
-    ChatroomClientProxy chatroomClientProxy;
+public class RoulettetableClientProxyTest {
+    RoulettetableClientProxy RoulettetableClientProxy;
     Chatter chatter;
     @BeforeEach
     public void setUp() throws IOException {
         Socket socket = new Socket("127.0.0.1", 12345);
-        chatroomClientProxy = new ChatroomClientProxy(socket);
+        RoulettetableClientProxy = new RoulettetableClientProxy(socket);
         chatter = new Chatter("Marcel");
-        chatroomClientProxy.enter(chatter);
+        RoulettetableClientProxy.enter(chatter);
     }
 
     @AfterEach
     public void tearDown() throws IOException {
-        chatroomClientProxy.disconnect();
+        RoulettetableClientProxy.disconnect();
     }
 
     @Test
     public void enter() {
         try {
-            chatroomClientProxy.enter(chatter);
+            RoulettetableClientProxy.enter(chatter);
             fail();
         } catch (Exception e) {
             assertTrue(e instanceof RuntimeException);
@@ -39,11 +39,11 @@ public class ChatroomClientProxyTest {
 
     @Test
     public void leave() {
-        chatroomClientProxy.leave(chatter);
+        RoulettetableClientProxy.leave(chatter);
     }
 
     @Test
     public void post() {
-        chatroomClientProxy.post(chatter, "message");
+        RoulettetableClientProxy.post(chatter, "message");
     }
 }

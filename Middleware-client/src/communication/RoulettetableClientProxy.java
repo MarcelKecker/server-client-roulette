@@ -1,7 +1,7 @@
 package communication;
 
 import fachlogik.Chatter;
-import interfaces.IChatroom;
+import interfaces.IRoulettetable;
 import interfaces.IChatter;
 
 import java.io.BufferedReader;
@@ -12,13 +12,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ChatroomClientProxy implements IChatroom {
+public class RoulettetableClientProxy implements IRoulettetable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
     HashMap<IChatter, Integer> chatters;
     int chatterCount = 0;
-    public ChatroomClientProxy(Socket socket) throws IOException {
+    public RoulettetableClientProxy(Socket socket) throws IOException {
         this.socket = socket;
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
         writer = new LogWriter(socket.getOutputStream(), true);
