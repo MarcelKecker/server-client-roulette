@@ -9,9 +9,8 @@ public class Player implements IPlayer {
         this.name = name;
     }
     @Override
-    public void hearResults(String result, int win) {
-        setSaldo(getSaldo() + win);
-        System.out.println(result);
+    public void hearResults(String resultMessage) {
+        System.out.println(resultMessage);
     }
 
     @Override
@@ -22,10 +21,5 @@ public class Player implements IPlayer {
     @Override
     public int getSaldo() {
         return 0;
-    }
-
-    @Override
-    public void setSaldo(int saldo) {
-        this.saldo = saldo;
     }
 }

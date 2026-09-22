@@ -1,8 +1,7 @@
 package interfaces;
 
 public interface IPlayer {
-    void hearResults(String results, int win);
+    void hearResults(String resultMessage);
     String getName();
     int getSaldo();
-    void setSaldo(int saldo);
 }
