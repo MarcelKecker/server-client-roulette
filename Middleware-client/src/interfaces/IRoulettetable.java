@@ -1,7 +1,7 @@
 package interfaces;
 
 public interface IRoulettetable {
-    void enter(IChatter chatter);
-    void leave(IChatter chatter);
-    void post(IChatter chatter, String message);
+    void enter(IPlayer Player);
+    void leave(IPlayer Player);
+    void post(IPlayer Player, String message);
 }

@@ -1,8 +1,8 @@
 package communication;
 
-import fachlogik.Chatter;
+import fachlogik.Player;
 import interfaces.IRoulettetable;
-import interfaces.IChatter;
+import interfaces.IPlayer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,22 +16,22 @@ public class RoulettetableClientProxy implements IRoulettetable {
     Socket socket;
     BufferedReader reader;
     PrintWriter writer;
-    HashMap<IChatter, Integer> chatters;
-    int chatterCount = 0;
+    HashMap<IPlayer, Integer> Players;
+    int PlayerCount = 0;
     public RoulettetableClientProxy(Socket socket) throws IOException {
         this.socket = socket;
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
         writer = new LogWriter(socket.getOutputStream(), true);
-        chatters = new HashMap<>();
+        Players = new HashMap<>();
         reader.readLine(); //Protokollzeile lesen (Welcome)
     }
 
     @Override
-    public void enter(IChatter chatter) {
+    public void enter(IPlayer Player) {
         try {
             reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
             writer.println("1");
-            sendChatter(chatter);
+            sendPlayer(Player);
             String returnCode = reader.readLine(); //Returncode lesen
             if (!returnCode.equals("0")) {
                 handleException(returnCode);
@@ -44,11 +44,11 @@ public class RoulettetableClientProxy implements IRoulettetable {
     }
 
     @Override
-    public void leave(IChatter chatter) {
+    public void leave(IPlayer Player) {
         try {
             reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
             writer.println("2");
-            sendChatter(chatter);
+            sendPlayer(Player);
             String returnCode = reader.readLine(); //Returncode lesen
             if (!returnCode.equals("0")) {
                 handleException(returnCode);
@@ -60,11 +60,11 @@ public class RoulettetableClientProxy implements IRoulettetable {
     }
 
     @Override
-    public void post(IChatter chatter, String message) {
+    public void post(IPlayer Player, String message) {
         try {
             reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
             writer.println("3");
-            sendChatter(chatter);
+            sendPlayer(Player);
             reader.readLine(); //Messageanforderung lesen
             writer.println(message);
             String returnCode = reader.readLine(); //Returncode lesen
@@ -87,23 +87,23 @@ public class RoulettetableClientProxy implements IRoulettetable {
         }
     }
 
-    public void sendChatter(IChatter chatter) throws IOException {
-        reader.readLine(); //"Enter chatter id" lesen
-        if (chatters.containsKey(chatter)) {
-            writer.println(chatters.get(chatter) + "");
+    public void sendPlayer(IPlayer Player) throws IOException {
+        reader.readLine(); //"Enter Player id" lesen
+        if (Players.containsKey(Player)) {
+            writer.println(Players.get(Player) + "");
             return;
         }
-        Integer id = chatterCount;
-        chatterCount++;
-        chatters.put(chatter, id);
+        Integer id = PlayerCount;
+        PlayerCount++;
+        Players.put(Player, id);
         writer.println("" + id);
         ServerSocket serverSocket = new ServerSocket(0);
         reader.readLine(); //"Enter ServerSocket Port" lesen
         writer.println(serverSocket.getLocalPort() + "");
         writer.flush();
         Socket socket = serverSocket.accept();
-        ChatterServerProxy chatterServerProxy = new ChatterServerProxy(socket, (Chatter) chatter);
-        Thread t = new Thread(chatterServerProxy);
+        PlayerServerProxy PlayerServerProxy = new PlayerServerProxy(socket, (Player) Player);
+        Thread t = new Thread(PlayerServerProxy);
         t.start();
     }
 

@@ -1,27 +1,27 @@
 package communication;
 
-import fachlogik.Chatter;
+import fachlogik.Player;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-public class ChatterServerProxy implements Runnable{
+public class PlayerServerProxy implements Runnable{
     Socket socket;
     LogWriter writer;
     LogReader reader;
-    Chatter chatter;
+    Player Player;
 
-    public ChatterServerProxy(Socket socket, Chatter chatter) throws IOException {
+    public PlayerServerProxy(Socket socket, Player Player) throws IOException {
         this.socket = socket;
-        this.chatter = chatter;
+        this.Player = Player;
         writer = new LogWriter(socket.getOutputStream(), true);
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
     }
 
     @Override
     public void run() {
-        writer.println("Welcome to the Chatter Server Proxy");
+        writer.println("Welcome to the Player Server Proxy");
         String input;
         do {
             writer.println("1: Hear; 2: Get Name; 3: Disconnect");
@@ -50,7 +50,7 @@ public class ChatterServerProxy implements Runnable{
         try {
             writer.println("Enter message");
             String message = reader.readLine();
-            chatter.hear(message);
+            Player.hear(message);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -59,7 +59,7 @@ public class ChatterServerProxy implements Runnable{
 
     private void getName() {
         try {
-            String name = chatter.getName();
+            String name = Player.getName();
             writer.println("0");
             writer.println(name);
         } catch (Exception e) {
