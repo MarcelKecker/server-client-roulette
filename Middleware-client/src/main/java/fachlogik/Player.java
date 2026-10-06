@@ -9,8 +9,8 @@ public class Player implements IPlayer {
         this.name = name;
     }
     @Override
-    public void hearResults(String resultMessage) {
-        System.out.println(resultMessage);
+    public void hearResults(String resultMessage, int win) {
+        System.out.println(resultMessage + " (Gewinn: " + win + ")");
     }
 
     @Override

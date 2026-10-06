@@ -129,7 +129,10 @@ kleines Overlay mit Labels, Textfeld und Button ist es deutlich schlanker.
 
 - `post(player, bet, stake)` gibt es inzwischen im `RoulettetableClientProxy`; der `<excludes>`-Block für
   `Main.java` in der `pom.xml` (siehe `TODO`) kann entfernt werden.
-- `PlayerServerProxy` ruft `Player.hearResults(result, win)` mit zwei Argumenten auf, `IPlayer`/`Player`
-  haben aber nur `hearResults(String)` – das muss in der Middleware angeglichen werden, sonst baut nichts.
+- `IPlayer`/`Player` haben jetzt `hearResults(String resultMessage, int win)`. Mit Serververbindung schreibt
+  das Frontend den Gewinn aus diesem Aufruf gut; offline wertet es selbst aus.
+- `RoulettetableClientProxyTest` nutzt noch das alte `post(player, "message")` und muss an
+  `post(player, bet, stake)` angepasst werden; bis dahin scheitern `mvn test` und `mvn package`
+  (`mvn compile exec:exec` funktioniert).
 - `Player.getSaldo()` liefert derzeit 0; das Frontend führt den angezeigten Saldo deshalb selbst.
 - Der Server (`../Middleware`) kompiliert derzeit nicht (Merge-Konflikte, Reste aus dem Chat-Projekt).

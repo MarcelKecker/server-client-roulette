@@ -54,3 +54,6 @@ Nicht KI-generiert und **nicht gekennzeichnet** sind:
 **KI-Beteiligung an diesen Dateien:**
 - Claude hat sie für den Maven-Build aus `src/` nach `src/main/java/` bzw. `src/test/java/` verschoben (`git mv`), am Inhalt aber nichts geändert.
 - Claude hatte `Player.java` anfangs um ein `saldo`-Feld ergänzt. Die aktuelle Fassung stammt vom Projektteam.
+- Auf Wunsch des Teams hat Claude in [IPlayer.java](src/main/java/interfaces/IPlayer.java) und
+  [Player.java](src/main/java/fachlogik/Player.java) die Signatur auf `hearResults(String resultMessage, int win)`
+  angepasst, passend zum Aufruf in `PlayerServerProxy`. In `Player` betrifft das nur diese eine Methode.

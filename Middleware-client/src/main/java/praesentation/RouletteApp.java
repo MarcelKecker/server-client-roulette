@@ -139,16 +139,12 @@ public class RouletteApp extends SimpleApplication {
         // Bewusst ohne FlyCamAppState, StatsAppState und DebugKeysAppState: keine freie Kamera
         super(new AudioListenerState(), new ConstantVerifierState());
         // Ergebnisse des Servers (PlayerServerProxy -> hearResults) kommen im Netzwerk-Thread an
-        // und werden fuer das HUD in den Render-Thread uebergeben.
+        // und werden in den Render-Thread uebergeben.
         player = new Player(playerName) {
             @Override
-            public void hearResults(String resultMessage) {
-                super.hearResults(resultMessage);
-                enqueue(() -> {
-                    if (hud != null) {
-                        hud.showTableMessage(resultMessage);
-                    }
-                });
+            public void hearResults(String resultMessage, int win) {
+                super.hearResults(resultMessage, win);
+                enqueue(() -> onServerResult(resultMessage, win));
             }
         };
     }
@@ -389,11 +385,32 @@ public class RouletteApp extends SimpleApplication {
         wheel.spinTo(result, this::resolve);
     }
 
+    /**
+     * Ergebnis vom Server: Mit Serververbindung ist der Server fuer die Auszahlung zustaendig,
+     * der Gewinn wird hier gutgeschrieben.
+     */
+    private void onServerResult(String resultMessage, int win) {
+        if (hud == null) {
+            return;
+        }
+        saldo += win;
+        hud.setBalance(saldo, board.total());
+        hud.showTableMessage(resultMessage + (win > 0 ? "  ·  Gewinn " + HudState.euro(win) : ""));
+        if (win > 0) {
+            hud.toast("Auszahlung vom Server: " + HudState.euro(win), HudState.GOOD, 3f);
+            sounds.playWin();
+        }
+    }
+
     private void resolve(int number) {
         int stake = board.total();
         int payout = board.payout(number);
         int net = payout - stake;
-        saldo += payout;
+        // Online zahlt der Server ueber hearResults aus; nur offline wertet die App selbst aus
+        boolean serverPays = proxy != null;
+        if (!serverPays) {
+            saldo += payout;
+        }
 
         String result = number + " " + RouletteRules.colorName(number).toUpperCase(Locale.ROOT);
         hud.addResult(number);
