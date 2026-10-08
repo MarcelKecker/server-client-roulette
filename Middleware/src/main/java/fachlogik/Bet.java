@@ -1,19 +1,22 @@
 package fachlogik;
 
+import java.util.UUID;
+
 public class Bet {
-    private int playerId;
+    private UUID playerId;
     private int stake;
     private int number;
     private BetType betType;
 
-    public Bet(int playerId, int stake, int number, BetType betType) {
+    public Bet() {}
+    public Bet(UUID playerId, int stake, int number, BetType betType) {
         this.playerId = playerId;
         this.stake = stake;
         this.number = number;
         this.betType = betType;
     }
 
-    public int getPlayerId() {
+    public UUID getPlayerId() {
         return playerId;
     }
     public int getStake() {
@@ -32,7 +35,7 @@ public class Bet {
         this.betType = betType;
     }
 
-    public void setPlayerId(int playerId) {
+    public void setPlayerId(UUID playerId) {
         this.playerId = playerId;
     }
 

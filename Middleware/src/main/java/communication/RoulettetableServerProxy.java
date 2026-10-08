@@ -1,5 +1,7 @@
 package communication;
 
+import fachlogik.Bet;
+import fachlogik.BetType;
 import fachlogik.Player;
 import interfaces.IRoulettetable;
 import interfaces.IPlayer;
@@ -10,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 
 public class RoulettetableServerProxy implements Runnable {
     Socket socket;
@@ -27,17 +30,17 @@ public class RoulettetableServerProxy implements Runnable {
 
     @Override
     public void run() {
-        writer.println("Willkommen am Pokertisch");
+        writer.println("Willkommen am Roulettetisch");
         boolean running = true;
         do {
-            writer.println("1: Beitreten; 2: Verlassen; 3: Abschicken; 4: Verbindung trennen");
+            writer.println("1: Beitreten; 2: Verlassen; 3: Wette erstellen; 4: Verbindung trennen");
             String input;
             try {
                 input = reader.readLine();
                 switch (input) {
                     case "1": enter(); break;
                     case "2": leave(); break;
-                    case "3": post(); break;
+                    case "3": postBet(); break;
                     case "4": disconnect();
                     running = false;
                     break;
@@ -75,16 +78,63 @@ public class RoulettetableServerProxy implements Runnable {
             handleException(e);
         }
     }
-    private void post() throws IOException {
+    private void postBet() throws IOException {
         IPlayer player = getPlayer();
-        writer.println("Nachricht eingeben");
-        String message = reader.readLine();
+        Bet bet = new Bet();
+        bet.setPlayerId(player.getId());
+        writer.println("Wie viel möchtest du setzen?");
+        String stakeInput = reader.readLine();
         try {
-            roulettetable.post(player, message);
-            writer.println("0");
-        } catch (Exception e) {
-            handleException(e);
+            int stake = Integer.parseInt(stakeInput.trim());
+            if (stake < 0) {
+                throw new NumberFormatException();
+            }
+
+            bet.setStake(stake);
+        } catch (NumberFormatException e) {
+            writer.println("Ungültige Eingabe");
+            postBet();
+            return;
         }
+
+        writer.println("Auf was möchtest du wetten; 1: Schwarz, 2: Rot, 3: Gerade, 4: Ungerade, 5: Zahl");
+        String input = reader.readLine();
+        switch (input) {
+            case "1":
+                bet.setBetType(BetType.BLACK);
+                break;
+            case "2":
+                bet.setBetType(BetType.RED);
+                break;
+            case "3":
+                bet.setBetType(BetType.EVEN);
+                break;
+            case "4":
+                bet.setBetType(BetType.ODD);
+                break;
+            case "5":
+                writer.println("Auf welche Zahl (0-36)?");
+                try {
+                    int zahl = Integer.parseInt(reader.readLine().trim());
+                    if (zahl < 0 || zahl > 36) {
+                        writer.println("Zahl muss zwischen 0 und 36 liegen");
+                        postBet();
+                        return;
+                    }
+                    bet.setBetType(BetType.NUMBER);
+                    bet.setNumber(zahl);
+                } catch (NumberFormatException e) {
+                    writer.println("Das war keine Zahl");
+                    postBet();
+                    return;
+                }
+                break;
+            default:
+                writer.println("Ungültige Eingabe");
+                postBet();
+                return;
+        }
+        roulettetable.addBet(bet);
     }
 
     private void disconnect() {
