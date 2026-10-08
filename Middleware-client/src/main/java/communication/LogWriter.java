@@ -1,4 +1,4 @@
-package communication;
+package main.java.communication;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;

@@ -1,6 +1,9 @@
-package communication;
+package main.java.communication;
 
-import fachlogik.Player;
+
+import main.java.fachlogik.Player;
+import main.java.communication.LogReader;
+import main.java.communication.LogWriter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,11 +13,11 @@ public class PlayerServerProxy implements Runnable{
     Socket socket;
     LogWriter writer;
     LogReader reader;
-    Player Player;
+    Player player;
 
-    public PlayerServerProxy(Socket socket, Player Player) throws IOException {
+    public PlayerServerProxy(Socket socket, Player player) throws IOException {
         this.socket = socket;
-        this.Player = Player;
+        this.player = player;
         writer = new LogWriter(socket.getOutputStream(), true);
         reader = new LogReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -24,20 +27,17 @@ public class PlayerServerProxy implements Runnable{
         writer.println("Welcome to the Player Server Proxy");
         String input;
         do {
-            writer.println("1: Hear; 2: Get Name; 3: Get Saldo; 4: Disconnect");
+            writer.println("1: Hear; 2: Get Name; 3: Disconnect");
             try {
                 input = reader.readLine();
                 switch (input) {
                     case "1":
-                        hearResults();
+                        hear();
                         break;
                     case "2":
                         getName();
                         break;
                     case "3":
-                        getSaldo();
-                        break;
-                    case "4":
                         disconnect();
                         break;
                     default:
@@ -46,16 +46,14 @@ public class PlayerServerProxy implements Runnable{
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-        } while (!input.equals("4"));
+        } while (!input.equals("3"));
     }
 
-    private void hearResults() {
+    private void hear() {
         try {
-            writer.println("Enter result");
-            String result = reader.readLine();
-            writer.println("Enter win");
-            int win = Integer.parseInt(reader.readLine());
-            Player.hearResults(result, win);
+            writer.println("Enter message");
+            String message = reader.readLine();
+            player.hear(message);
             writer.println("0");
         } catch (Exception e) {
             handleException(e);
@@ -64,23 +62,13 @@ public class PlayerServerProxy implements Runnable{
 
     private void getName() {
         try {
-            String name = Player.getName();
+            String name = player.getName();
             writer.println("0");
             writer.println(name);
         } catch (Exception e) {
             handleException(e);
         }
 
-    }
-
-    private void getSaldo() {
-        try {
-            int saldo = Player.getSaldo();
-            writer.println("0");
-            writer.println(saldo);
-        } catch (Exception e) {
-            handleException(e);
-        }
     }
 
     private void disconnect() {

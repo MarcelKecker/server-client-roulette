@@ -1,16 +1,18 @@
-package fachlogik;
+package main.java.fachlogik;
 
-import interfaces.IPlayer;
+import main.java.interfaces.IPlayer;
+
+import java.util.UUID;
 
 public class Player implements IPlayer {
     String name;
-    int saldo;
+    UUID id;
     public Player(String name) {
         this.name = name;
     }
     @Override
-    public void hearResults(String resultMessage, int win) {
-        System.out.println(resultMessage + " (Gewinn: " + win + ")");
+    public void hear(String message) {
+        System.out.println(message + " (" + name + ")");
     }
 
     @Override
@@ -19,7 +21,7 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public int getSaldo() {
-        return 0;
+    public UUID getID() {
+        return id;
     }
 }

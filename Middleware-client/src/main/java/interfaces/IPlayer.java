@@ -1,7 +1,9 @@
-package interfaces;
+package main.java.interfaces;
+
+import java.util.UUID;
 
 public interface IPlayer {
-    void hearResults(String resultMessage, int win);
+    void hear(String message);
     String getName();
-    int getSaldo();
+    UUID getID();
 }
