@@ -1,6 +1,6 @@
 # KI-generierte Dateien
 
-> **KI-generiert:** Auch diese Übersicht wurde mit Claude erstellt.
+
 
 Die folgenden Dateien wurden mit **Claude** (Anthropic, Modell Claude Opus 5.5) über **Claude Code**
 erstellt und **nicht vom Projektteam** geschrieben. Jede dieser Dateien trägt zusätzlich einen
@@ -41,19 +41,6 @@ Kopfvermerk `KI-GENERIERT`.
 | [Crowd.java](src/main/java/praesentation/Crowd.java) | Mitspieler, Bar, Kellner und weitere Gäste |
 | [SoundBank.java](src/main/java/praesentation/SoundBank.java) | synthetisierte Geräusche und Musik |
 
-## Dateien des Projektteams
 
-Nicht KI-generiert und **nicht gekennzeichnet** sind:
 
-- [Main.java](src/main/java/Main.java)
-- [communication/](src/main/java/communication/) (`RoulettetableClientProxy`, `PlayerServerProxy`, `LogReader`, `LogWriter`)
-- [fachlogik/Player.java](src/main/java/fachlogik/Player.java)
-- [interfaces/](src/main/java/interfaces/) (`IPlayer`, `IRoulettetable`)
-- [RoulettetableClientProxyTest.java](src/test/java/communication/RoulettetableClientProxyTest.java)
 
-**KI-Beteiligung an diesen Dateien:**
-- Claude hat sie für den Maven-Build aus `src/` nach `src/main/java/` bzw. `src/test/java/` verschoben (`git mv`), am Inhalt aber nichts geändert.
-- Claude hatte `Player.java` anfangs um ein `saldo`-Feld ergänzt. Die aktuelle Fassung stammt vom Projektteam.
-- Auf Wunsch des Teams hat Claude in [IPlayer.java](src/main/java/interfaces/IPlayer.java) und
-  [Player.java](src/main/java/fachlogik/Player.java) die Signatur auf `hearResults(String resultMessage, int win)`
-  angepasst, passend zum Aufruf in `PlayerServerProxy`. In `Player` betrifft das nur diese eine Methode.

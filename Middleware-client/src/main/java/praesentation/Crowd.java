@@ -115,7 +115,7 @@ public class Crowd {
 
     // ---------------------------------------------------------------- Rundenablauf
 
-    /** Rien ne va plus: Gaeste schauen gebannt aufs Rad. */
+    /** Viel Erfolg: Gaeste schauen gebannt aufs Rad. */
     public void onSpin() {
         bettingOpen = false;
         watching = true;

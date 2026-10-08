@@ -108,7 +108,7 @@ public class Dealer {
     /** Kugel einwerfen und danach dem Rad zuschauen. */
     public void throwBall() {
         startGesture(Gesture.THROW);
-        say("Rien ne va plus!", 2.5f);
+        say("Viel Erfolg!", 2.5f);
     }
 
     /** Ergebnis ansagen und zum Tisch zeigen. */

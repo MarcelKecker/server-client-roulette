@@ -295,7 +295,7 @@ public class RouletteApp extends SimpleApplication {
 
     private boolean bettingLocked() {
         if (roundInProgress) {
-            hud.toast("Rien ne va plus – warte auf die nächste Runde", HudState.BAD, 2f);
+            hud.toast("Nichts erlaubt – warte auf die nächste Runde", HudState.BAD, 2f);
         }
         return roundInProgress;
     }
@@ -372,7 +372,7 @@ public class RouletteApp extends SimpleApplication {
         roundInProgress = true;
         seat.setWalkAllowed(false);
         hud.setSpinning(true);
-        hud.toast("Rien ne va plus!", HudState.GOLD, 2f);
+        hud.toast("Viel Erfolg!", HudState.GOLD, 2f);
         dealer.throwBall();
         crowd.onSpin();
         sounds.playSpin(wheel.getCenter(), 1f);
