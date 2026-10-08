@@ -10,6 +10,7 @@ public class Player implements IPlayer {
     UUID id;
     public Player(String name) {
         this.name = name;
+        this.id = UUID.randomUUID();
     }
     @Override
     public void hear(String message) {
