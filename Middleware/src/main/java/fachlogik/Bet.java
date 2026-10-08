@@ -49,6 +49,14 @@ public class Bet {
 
     @Override
     public String toString() {
-        return  stake + "\t" + number + "\t" + betType;
+        String target = switch (betType) {
+            case RED -> "Rot";
+            case BLACK -> "Schwarz";
+            case EVEN -> "Gerade";
+            case ODD -> "Ungerade";
+            case NUMBER -> "Zahl " + number;
+            default -> String.valueOf(betType);
+        };
+        return stake + "€ auf " + target;
     }
 }

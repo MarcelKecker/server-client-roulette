@@ -15,7 +15,7 @@ public class Player implements IPlayer {
     }
     @Override
     public void hear(String message) {
-        System.out.println(message + " (" + name + ")");
+        System.out.println(message);
     }
 
     @Override
