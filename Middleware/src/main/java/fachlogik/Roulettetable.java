@@ -91,13 +91,13 @@ public class Roulettetable implements interfaces.IRoulettetable {
         }
 
 
+        String suffix = " (Saldo: " + saldos.get(p) + "€)";
         for (IPlayer player : players) {
             if (player == p) {
-                t = ("Ich habe " + t);
+                player.hear("Du hast " + t + suffix);
             } else {
-                t = (p.getName() + " hat " + t);
+                player.hear(p.getName() + " hat " + t + suffix);
             }
-            player.hear(t + " Neuer Saldo: " + saldos.get(player) + "€");
         }
     }
 
