@@ -27,6 +27,9 @@ public class PlayerServerProxy implements Runnable{
             writer.println("1: Hear; 2: Get Name; 3: Disconnect; 4: Get Id");
             try {
                 input = reader.readLine();
+                if (input == null) { // Verbindung wurde ohne Disconnect geschlossen
+                    break;
+                }
                 switch (input) {
                     case "1":
                         hear();
@@ -47,6 +50,10 @@ public class PlayerServerProxy implements Runnable{
                 throw new RuntimeException(e);
             }
         } while (!input.equals("3"));
+        try {
+            socket.close();
+        } catch (IOException ignored) {
+        }
     }
 
     private void hear() {

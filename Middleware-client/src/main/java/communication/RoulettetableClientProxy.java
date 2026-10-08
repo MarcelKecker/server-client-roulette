@@ -118,14 +118,15 @@ public class RoulettetableClientProxy implements IRoulettetable {
 
     public void disconnect() {
         try {
-            reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
+            reader.readLine();   // Menüzeile
             writer.println("4");
+            reader.readLine();   // "Verbindung vom Pokertisch trennen"
+            socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
     }
-
     public void sendPlayer(IPlayer player) throws IOException {
         reader.readLine(); //"Enter player id" lesen
         if (players.containsKey(player)) {

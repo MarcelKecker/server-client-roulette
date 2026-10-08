@@ -145,10 +145,10 @@ public class RoulettetableServerProxy implements Runnable {
 
     private void disconnect() {
         for (IPlayer iPlayer : players.values()) {
-            PlayerClientProxy player = (PlayerClientProxy) iPlayer;
-            player.deactivate();
+            ((PlayerClientProxy) iPlayer).disconnect();
         }
         writer.println("Verbindung vom Pokertisch trennen");
+        try { socket.close(); } catch (IOException ignored) {}
     }
 
     private void handleException(Exception e) {

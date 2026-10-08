@@ -86,6 +86,19 @@ public class PlayerClientProxy implements IPlayer {
         throw new RuntimeException("Exception " + returnCode + " " + exceptionMessage);
     }
 
+    public void disconnect() {
+        if (!active) return;
+        active = false;
+        try {
+            reader.readLine();    // Menüzeile
+            writer.println("3");  // 3: Disconnect (4 wäre Get Id)
+            reader.readLine();    // "Goodbye"
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void deactivate() {
         this.active = false;
     }
