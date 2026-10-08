@@ -6,6 +6,7 @@ import interfaces.IPlayer;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.UUID;
 
 public class PlayerClientProxy implements IPlayer {
     Socket socket;
@@ -56,6 +57,11 @@ public class PlayerClientProxy implements IPlayer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public UUID getId() {
+        return null;
     }
 
     private void handleException(String returnCode) throws IOException {
