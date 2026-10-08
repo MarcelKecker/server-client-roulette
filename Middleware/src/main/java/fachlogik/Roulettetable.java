@@ -6,10 +6,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.*;
 
 public class Roulettetable implements interfaces.IRoulettetable {
-
+    public static final int DEFAULT_SALDO = 1000;
     List<IPlayer> players = new CopyOnWriteArrayList<>();
     List<Bet> activeBets = new ArrayList<>();
     Boolean isGameActive = false;
+    Map<IPlayer, Integer> saldos = new HashMap<>();
     private static final Map<Integer, String> ROULETTE_MAP = Map.ofEntries(
             Map.entry(0, "Grün"),
             Map.entry(1, "Rot"),
@@ -56,7 +57,8 @@ public class Roulettetable implements interfaces.IRoulettetable {
             throw new IllegalArgumentException("Spieler " + player.getName() + " gibt es schon");
         }
         players.add(player);
-        post(player.getName() + " hat sich an den Tisch gesetzt und " + player.getSaldo() + "€ dabei!");
+        saldos.put(player, DEFAULT_SALDO);
+        post(player.getName() + " hat sich an den Tisch gesetzt und " + saldos.get(player) + "€ dabei!");
     }
 
     @Override
@@ -65,7 +67,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
             throw new IllegalArgumentException("Spieler " + player.getName() + " gibt es nicht");
         }
         players.remove(player);
-        post(player.getName() + " hat den Tisch verlassen und seine " + player.getSaldo() + "€ wieder mit nach Hause genommen!");
+        post(player.getName() + " hat den Tisch verlassen und seine " + saldos.get(player) + "€ wieder mit nach Hause genommen!");
     }
 
     @Override
@@ -96,7 +98,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
             } else {
                 t = (p.getName() + " hat " + t);
             }
-            player.hear(t + " Neuer Saldo: " + player.getSaldo() + "€");
+            player.hear(t + " Neuer Saldo: " + saldos.get(player) + "€");
         }
     }
 
@@ -109,11 +111,11 @@ public class Roulettetable implements interfaces.IRoulettetable {
     public void addBet(Bet bet) {
         for(IPlayer player : players) {
             if(player.getId().equals(bet.getPlayerId())) {
-                if(player.getSaldo() < bet.getStake()) {
+                if(saldos.get(player) < bet.getStake()) {
                     player.hear("Du hast nicht genug Geld !!!");
                     return;
                 }
-                player.setSaldo(player.getSaldo() - bet.getStake());
+                saldos.put(player, saldos.get(player) - bet.getStake());
                 postBet(player, bet);
             }
         }
@@ -167,7 +169,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
                 case BetType.BLACK:
                     if (color.equals("Schwarz")) {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) + bet.getStake());
-                        player.setSaldo(player.getSaldo() + bet.getStake() * 2);
+                        saldos.put(player, saldos.get(player) + bet.getStake() * 2);
                     } else {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) - bet.getStake());
                     }
@@ -175,7 +177,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
                 case BetType.RED:
                     if (color.equals("Rot")) {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) + bet.getStake());
-                        player.setSaldo(player.getSaldo() + bet.getStake() * 2);
+                        saldos.put(player, saldos.get(player) + bet.getStake() * 2);
                     } else {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) - bet.getStake());
                     }
@@ -183,7 +185,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
                 case BetType.EVEN:
                     if (random != 0 && random % 2 == 0) {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) + bet.getStake());
-                        player.setSaldo(player.getSaldo() + bet.getStake() * 2);
+                        saldos.put(player, saldos.get(player) + bet.getStake() * 2);
                     } else {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) - bet.getStake());
                     }
@@ -191,7 +193,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
                 case BetType.ODD:
                     if (random % 2 == 1) {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) + bet.getStake());
-                        player.setSaldo(player.getSaldo() + bet.getStake() * 2);
+                        saldos.put(player, saldos.get(player) + bet.getStake() * 2);
                     } else {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) - bet.getStake());
                     }
@@ -199,7 +201,7 @@ public class Roulettetable implements interfaces.IRoulettetable {
                 case BetType.NUMBER:
                     if (bet.getNumber() == random) {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) + bet.getStake() * 35);
-                        player.setSaldo(player.getSaldo() + bet.getStake() * 36);
+                        saldos.put(player, saldos.get(player) + bet.getStake() * 36);
                     } else {
                         results.put(bet.getPlayerId(), results.get(bet.getPlayerId()) - bet.getStake());
                     }
