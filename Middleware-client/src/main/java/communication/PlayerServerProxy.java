@@ -1,9 +1,6 @@
-package main.java.communication;
+package communication;
 
-
-import main.java.fachlogik.Player;
-import main.java.communication.LogReader;
-import main.java.communication.LogWriter;
+import fachlogik.Player;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,7 +24,7 @@ public class PlayerServerProxy implements Runnable{
         writer.println("Welcome to the Player Server Proxy");
         String input;
         do {
-            writer.println("1: Hear; 2: Get Name; 3: Disconnect");
+            writer.println("1: Hear; 2: Get Name; 3: Disconnect; 4: Get Id");
             try {
                 input = reader.readLine();
                 switch (input) {
@@ -39,6 +36,9 @@ public class PlayerServerProxy implements Runnable{
                         break;
                     case "3":
                         disconnect();
+                        break;
+                    case "4":
+                        getId();
                         break;
                     default:
                         writer.println("Invalid input");
@@ -69,6 +69,16 @@ public class PlayerServerProxy implements Runnable{
             handleException(e);
         }
 
+    }
+
+    private void getId() {
+        try {
+            String id = player.getId().toString();
+            writer.println("0");
+            writer.println(id);
+        } catch (Exception e) {
+            handleException(e);
+        }
     }
 
     private void disconnect() {

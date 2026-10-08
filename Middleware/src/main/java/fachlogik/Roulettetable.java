@@ -70,7 +70,6 @@ public class Roulettetable implements interfaces.IRoulettetable {
         post(player.getName() + " hat den Tisch verlassen und seine " + saldos.get(player) + "€ wieder mit nach Hause genommen!");
     }
 
-    @Override
     public void postBet(IPlayer p, Bet bet) {
         for (IPlayer player : players) {
             if (player == p) {

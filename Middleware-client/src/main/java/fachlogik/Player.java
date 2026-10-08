@@ -1,6 +1,7 @@
-package main.java.fachlogik;
+package fachlogik;
 
-import main.java.interfaces.IPlayer;
+
+import interfaces.IPlayer;
 
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public UUID getID() {
+    public UUID getId() {
         return id;
     }
 }

@@ -1,9 +1,11 @@
-package main.java.communication;
+package communication;
 
-import main.java.fachlogik.Bet;
-import main.java.fachlogik.Player;
-import main.java.interfaces.IPlayer;
-import main.java.interfaces.IRoulettetable;
+
+import fachlogik.Bet;
+import fachlogik.BetType;
+import fachlogik.Player;
+import interfaces.IPlayer;
+import interfaces.IRoulettetable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,27 +63,49 @@ public class RoulettetableClientProxy implements IRoulettetable {
     }
 
     @Override
-    public void postBet(IPlayer player, Bet bet) {
-
-    }
-
-    @Override
-    public void postResult(IPlayer p, int win) {
-
-    }
-
-    @Override
     public void addBet(Bet bet) {
+        IPlayer player = null;
+        for (IPlayer p : players.keySet()) {
+            if (p.getId().equals(bet.getPlayerId())) {
+                player = p;
+            }
+        }
+        if (player == null) {
+            throw new IllegalArgumentException("Spieler ist nicht am Tisch");
+        }
+        if (bet.getStake() < 0) {
+            throw new IllegalArgumentException("Einsatz darf nicht negativ sein");
+        }
+        if (bet.getBetType() == BetType.NUMBER && (bet.getNumber() < 0 || bet.getNumber() > 36)) {
+            throw new IllegalArgumentException("Zahl muss zwischen 0 und 36 liegen");
+        }
 
-    }
-
-    @Override
-    public void post(String message) {
         try {
-            reader.readLine(); //Protokollzeile lesen (1: enter; 2: leave; 3: post; 4: disconnect)
+            reader.readLine(); //Protokollzeile lesen
             writer.println("3");
-            reader.readLine(); //Messageanforderung lesen
-            writer.println(message);
+            sendPlayer(player);
+            reader.readLine(); //"Wie viel möchtest du setzen?" lesen
+            writer.println(bet.getStake() + "");
+            reader.readLine(); //"Auf was möchtest du wetten" lesen
+            switch (bet.getBetType()) {
+                case BetType.BLACK:
+                    writer.println("1");
+                    break;
+                case BetType.RED:
+                    writer.println("2");
+                    break;
+                case BetType.EVEN:
+                    writer.println("3");
+                    break;
+                case BetType.ODD:
+                    writer.println("4");
+                    break;
+                case BetType.NUMBER:
+                    writer.println("5");
+                    reader.readLine(); //"Auf welche Zahl (0-36)?" lesen
+                    writer.println(bet.getNumber() + "");
+                    break;
+            }
             String returnCode = reader.readLine(); //Returncode lesen
             if (!returnCode.equals("0")) {
                 handleException(returnCode);

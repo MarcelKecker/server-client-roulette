@@ -84,6 +84,9 @@
                     <excludes>
                         <exclude>Main.java</exclude>
                     </excludes>
+                    <source>23</source>
+                    <target>23</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <!-- Start: mvn compile exec:exec   (optional: -Dspieler=Leo -Dvollbild=true) -->

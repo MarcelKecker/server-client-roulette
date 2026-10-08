@@ -78,6 +78,7 @@ public class RoulettetableServerProxy implements Runnable {
             handleException(e);
         }
     }
+
     private void postBet() throws IOException {
         IPlayer player = getPlayer();
         Bet bet = new Bet();
@@ -134,7 +135,12 @@ public class RoulettetableServerProxy implements Runnable {
                 postBet();
                 return;
         }
-        roulettetable.addBet(bet);
+        try {
+            roulettetable.addBet(bet);
+            writer.println("0");
+        } catch (Exception e) {
+            handleException(e);
+        }
     }
 
     private void disconnect() {

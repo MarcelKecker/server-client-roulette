@@ -1,4 +1,4 @@
-package main.java.fachlogik;
+package fachlogik;
 
 public enum BetType {
     RED,

@@ -1,4 +1,4 @@
-package main.java.fachlogik;
+package fachlogik;
 
 import java.util.UUID;
 

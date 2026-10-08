@@ -1,6 +1,5 @@
 package communication;
 
-import fachlogik.Player;
 import interfaces.IPlayer;
 
 import java.io.IOException;
@@ -13,6 +12,7 @@ public class PlayerClientProxy implements IPlayer {
     LogReader reader;
     LogWriter writer;
     boolean active;
+    UUID id;
 
     public PlayerClientProxy(Socket socket) throws IOException {
         this.socket = socket;
@@ -23,7 +23,7 @@ public class PlayerClientProxy implements IPlayer {
     }
 
     @Override
-    public void hear(String message) {
+    public synchronized void hear(String message) {
         if (!active) {
             return;
         }
@@ -42,7 +42,7 @@ public class PlayerClientProxy implements IPlayer {
     }
 
     @Override
-    public String getName() {
+    public synchronized String getName() {
         if (!active) {
             return null;
         }
@@ -60,8 +60,25 @@ public class PlayerClientProxy implements IPlayer {
     }
 
     @Override
-    public UUID getId() {
-        return null;
+    public synchronized UUID getId() {
+        if (id != null) {
+            return id;
+        }
+        if (!active) {
+            return null;
+        }
+        try {
+            reader.readLine(); //Protokollzeile lesen
+            writer.println("4");
+            String returnCode = reader.readLine(); //Returncode lesen
+            if (!returnCode.equals("0")) {
+                handleException(returnCode);
+            }
+            id = UUID.fromString(reader.readLine()); //ID lesen
+            return id;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void handleException(String returnCode) throws IOException {
