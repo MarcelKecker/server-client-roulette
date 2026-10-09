@@ -99,7 +99,4 @@ public class PlayerClientProxy implements IPlayer {
         }
     }
 
-    public void deactivate() {
-        this.active = false;
-    }
 }
